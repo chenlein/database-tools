@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.dameng.dmcp'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+mainClassName = "com.dameng.dmcp.tools.DatabaseTools"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'dm', name: 'Dm7JdbcDriver', version: '7.1', classifier: 'jdk17-20170808'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.46'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
+    compile group: 'org.apache.hive', name: 'hive-jdbc', version: '3.1.0'
+
+    compile fileTree(dir: 'libs', include: '*.jar')
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task runnableJar(type: Jar) {
+    from files(sourceSets.main.output.getClassesDirs())
+    from configurations.runtime.asFileTree.files.collect { zipTree(it) }
+    manifest {
+        attributes 'Main-Class': 'com.dameng.dmcp.tools.DatabaseTools'
+    }
+}
+
